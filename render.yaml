@@ -13,17 +13,16 @@ services:
         value: 10000
       - key: MONGODB_URI
         sync: false
-        placeholder: "Your MongoDB Atlas connection string"
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
         fromService:
-          type: static_site
+          type: static
           name: access-portal-frontend
           property: url
 
   # Frontend Static Site
-  - type: static_site
+  - type: static
     name: access-portal-frontend
     rootDir: access-request-portal/frontend
     buildCommand: npm install && npm run build
