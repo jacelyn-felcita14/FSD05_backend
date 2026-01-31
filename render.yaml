@@ -20,7 +20,7 @@ services:
         fromContext: static_site_url
 
   # Frontend Static Site
-  - type: static
+  - type: static_site
     name: access-portal-frontend
     env: static
     rootDir: access-request-portal/frontend
