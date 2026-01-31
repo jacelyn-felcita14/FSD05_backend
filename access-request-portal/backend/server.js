@@ -7,6 +7,8 @@ const connectDatabase = require('./config/database');
 const authRoutes = require('./routes/auth.routes');
 const requestRoutes = require('./routes/request.routes');
 
+const path = require('path');
+
 // Initialize express app
 const app = express();
 
@@ -24,7 +26,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/requests', requestRoutes);
 
@@ -37,13 +39,29 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: 'Route not found'
+// SERVE FRONTEND IN PRODUCTION
+if (process.env.NODE_ENV === 'production') {
+    // Set static folder
+    const frontendPath = path.join(__dirname, '../frontend/dist');
+    app.use(express.static(frontendPath));
+
+    // Handle React routing, return all requests to React app
+    app.get('*', (req, res) => {
+        // Check if the request is an API request
+        if (req.path.startsWith('/api')) {
+            return res.status(404).json({ success: false, message: 'API route not found' });
+        }
+        res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
     });
-});
+} else {
+    // 404 handler for development
+    app.use((req, res) => {
+        res.status(404).json({
+            success: false,
+            message: 'Route not found'
+        });
+    });
+}
 
 // Global error handler
 app.use((err, req, res, next) => {
