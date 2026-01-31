@@ -15,13 +15,8 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
-      - key: FRONTEND_URL
-        fromService:
-          type: web
-          name: access-portal-frontend
-          property: url
 
-  # Frontend (Static via web+static)
+  # Frontend Static Service
   - type: web
     name: access-portal-frontend
     env: static
@@ -33,7 +28,7 @@ services:
         fromService:
           type: web
           name: access-portal-backend
-          property: url
+          property: hostport
         suffix: /api
     routes:
       - type: rewrite
