@@ -22,7 +22,6 @@ services:
   # Frontend Static Site
   - type: static_site
     name: access-portal-frontend
-    env: static
     rootDir: access-request-portal/frontend
     buildCommand: npm install && npm run build
     publishDir: dist
