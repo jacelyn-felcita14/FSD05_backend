@@ -1,9 +1,11 @@
 services:
+  # Backend Web Service
   - type: web
-    name: access-control-portal
+    name: access-portal-backend
     env: node
-    buildCommand: "cd access-request-portal/backend && npm install && cd ../frontend && npm install && npm run build"
-    startCommand: "cd access-request-portal/backend && node server.js"
+    rootDir: access-request-portal/backend
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -11,8 +13,29 @@ services:
         value: 10000
       - key: MONGODB_URI
         sync: false
-        placeholder: "Paste your MongoDB Atlas connection string here"
+        placeholder: "Your MongoDB Atlas connection string"
       - key: JWT_SECRET
         generateValue: true
+      - key: FRONTEND_URL
+        fromService:
+          type: static_site
+          name: access-portal-frontend
+          property: url
+
+  # Frontend Static Site
+  - type: static_site
+    name: access-portal-frontend
+    rootDir: access-request-portal/frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
       - key: VITE_API_URL
-        value: "/api"
+        fromService:
+          type: web
+          name: access-portal-backend
+          property: url
+        suffix: /api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
