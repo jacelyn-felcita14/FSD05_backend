@@ -1,5 +1,5 @@
 services:
-  # Backend Web Service
+  # Backend API Service
   - type: web
     name: access-portal-backend
     env: node
@@ -17,16 +17,17 @@ services:
         generateValue: true
       - key: FRONTEND_URL
         fromService:
-          type: static
+          type: web
           name: access-portal-frontend
           property: url
 
-  # Frontend Static Site
-  - type: static
+  # Frontend (Static via web+static)
+  - type: web
     name: access-portal-frontend
+    env: static
     rootDir: access-request-portal/frontend
     buildCommand: npm install && npm run build
-    publishDir: dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
         fromService:
