@@ -1,5 +1,4 @@
 services:
-  # Backend Web Service
   - type: web
     name: access-portal-backend
     env: node
@@ -9,17 +8,12 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: MONGODB_URI
         sync: false
-        placeholder: "Your MongoDB Atlas URI (e.g. mongodb+srv://...)"
+        placeholder: "Paste your MongoDB Atlas connection string here"
       - key: JWT_SECRET
         generateValue: true
-      - key: FRONTEND_URL
-        fromContext: static_site_url
 
-  # Frontend Static Site
   - type: static
     name: access-portal-frontend
     rootDir: access-request-portal/frontend
