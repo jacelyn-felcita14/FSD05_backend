@@ -20,9 +20,8 @@ services:
         fromContext: static_site_url
 
   # Frontend Static Site
-  - type: web
+  - type: static
     name: access-portal-frontend
-    runtime: static
     rootDir: access-request-portal/frontend
     buildCommand: npm install && npm run build
     publishDir: dist
